@@ -1,0 +1,15 @@
+all_hosts:
+  hosts:
+    blu1_vps:
+      ansible_host: 178.254.25.234
+
+  vars:
+    ansible_user: root
+
+next_cloud_servers:
+  hosts:
+    blu1_vps:
+      ansible_host: 178.254.25.234
+
+  vars:
+    ansible_user: root
