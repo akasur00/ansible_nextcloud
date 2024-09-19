@@ -1,0 +1,113 @@
+- name: My First Play
+  hosts: next_cloud_servers
+  tasks:
+    - name: update all packages
+      apt:
+        name: "*"
+        state: latest
+
+    - name: install python3-apt
+      package:
+          name: python3-apt
+          state: present
+
+    - name: install apache
+      apt:
+        name: apache2
+        state: present
+
+    - name: install php and modules
+      apt:
+        pkg:
+          - php
+          - php-curl
+          - php-dompdf
+          - php-gd
+          - php-mbstring
+          - php-zip
+          - php-intl
+          - php-ldap
+          - php-imap
+          - php-bcmath
+          - php-gmp
+          - php-imagick
+          - php-phar
+        state: present
+
+    - name: install ffmpeg
+      apt:
+        name: ffmpeg
+        state: present
+
+    - name: install libreOffice
+      apt:
+        name: libreoffice
+        state: present
+
+    - name: install mariaDB
+      apt:
+        name: mariadb-server
+        state: present
+
+    - name: configure Apache with nextcloud config
+      ansible.builtin.template:
+        src: nextcloud.conf.j2
+        dest: /etc/apache2/sites-available/nextcloud.conf
+
+    - name: enable apache site nextcloud.conf
+      ansible.builtin.command: a2ensite nextcloud.conf
+
+    - name: enable apache module rewrite
+      ansible.builtin.command: a2enmod rewrite
+
+    - name: enable apache module headers
+      ansible.builtin.command: a2enmod headers
+
+    - name: enable apache module env
+      ansible.builtin.command: a2enmod env
+
+    - name: enable apache module dir
+      ansible.builtin.command: a2enmod dir
+
+    - name: enable apache module mime
+      ansible.builtin.command: a2enmod mime
+      notify: restart apache
+
+    - name: create db user
+      ansible.builtin.command: mysql -u root -e "CREATE USER IF NOT EXISTS 'admin'@'localhost' IDENTIFIED BY 'admin';"
+
+    - name: create db
+      ansible.builtin.command: mysql -u root -e "CREATE DATABASE IF NOT EXISTS nextcloud CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;"
+
+    - name: grant privileges
+      ansible.builtin.command: mysql -u root -e "GRANT ALL PRIVILEGES ON nextcloud.* TO 'admin'@'localhost';"
+
+    - name: flush privileges
+      ansible.builtin.command: mysql -u root -e "FLUSH PRIVILEGES;"
+
+    - name: get latest nextcloud version
+      ansible.builtin.command: curl -o /tmp/nextcloud.tar.bz2 https://download.nextcloud.com/server/releases/latest.tar.bz2
+
+    - name: extract nextcloud
+      ansible.builtin.command: tar -xjvf /tmp/nextcloud.tar.bz2
+
+    - name: copy nextcloud to /var/www
+      ansible.builtin.command: cp -r nextcloud /var/www
+
+    - name: change owner of nextcloud
+      ansible.builtin.command: chown -R www-data:www-data /var/www/nextcloud
+
+    - name: set permissions for temporary directory
+      ansible.builtin.command: mkdir -p /var/www/.ansible/tmp && chown -R www-data:www-data /var/www/.ansible
+
+    - name: install nextcloud
+      ansible.builtin.command: php /var/www/nextcloud/occ maintenance:install --database "mysql" --database-name "nextcloud" --database-user "nextcloud" --database-pass "password" --admin-user "admin" --admin-pass "admin"
+      become: true
+      become_user: www-data
+
+  handlers:
+    - name: restart apache
+      systemd:
+        name: apache2
+        state: restarted
+
