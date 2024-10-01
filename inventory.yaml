@@ -3,7 +3,7 @@
 # Bitte die passenden Werte eintragen
 all:
   vars:
-    nextcloud_server_ip: 178.254.25.234
+    nextcloud_server_ip: 192.168.1.1
     admin_user: admin
     admin_password: admin
 
