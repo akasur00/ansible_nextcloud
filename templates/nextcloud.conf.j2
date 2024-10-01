@@ -1,9 +1,10 @@
-Alias /nextcloud "/var/www/nextcloud/"
+Alias / "/var/www/nextcloud/"
 
 <Directory /var/www/nextcloud/>
   Require all granted
   AllowOverride All
   Options FollowSymLinks MultiViews
+  Satisfy Any
 
   <IfModule mod_dav.c>
     Dav off

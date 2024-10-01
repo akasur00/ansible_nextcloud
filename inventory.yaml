@@ -1,15 +1,18 @@
-all_hosts:
-  hosts:
-    blu1_vps:
-      ansible_host: 178.254.25.234
 
+### Variablen Deklaration ###
+# Bitte die passenden Werte eintragen
+all:
   vars:
-    ansible_user: root
+    nextcloud_server_ip: 178.254.25.234
+    admin_user: admin
+    admin_password: admin
 
-next_cloud_servers:
+### Inventar Deklaration ###
+
+next_cloud_server:
   hosts:
     blu1_vps:
-      ansible_host: 178.254.25.234
+      ansible_host: "{{ nextcloud_server_ip }}"
 
   vars:
     ansible_user: root
