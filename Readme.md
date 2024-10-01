@@ -79,7 +79,7 @@ Als Nächstes lesen wir unseren public Key des Pairs aus und kopieren diesen:
 cat id_ed25519.pub
 ```
 
-[!Warning]
+[!WARNING]
 Verbreite nur den public Key, der private Key verbleibt nur auf der Control-Node!
 
 Verbinde dich nun mit der Managed-Node.
@@ -104,7 +104,7 @@ mit den Namen "nextcloud.yaml".
 In einem Playbook stehen alle Aufgaben, die Ansible auf den Managed Nodes ausführen soll.
 Das Inventory listet alle Managed Nodes auf, auf denen die Aufgaben ausgeführt werden sollen.
 
-[important]
+[!IMPORTANT]
 In der "inventory.yaml" muss unter "nextcloud_server_ip" die IP-Adresse des Servers eingetragen werden, auf dem Nextcloud installiert werden soll.
 
 Ebenso kann der Name des Admin Users und das Passwort angepasst werden.
