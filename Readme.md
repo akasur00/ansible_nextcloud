@@ -78,8 +78,9 @@ Als Nächstes lesen wir unseren public Key des Pairs aus und kopieren diesen:
 ```bash
 cat id_ed25519.pub
 ```
-| :exclamation: | Verbreite nur den public Key, der private Key verbleibt nur auf der Control-Node!|
-|-----------------------------------------|
+
+| :warning:    | Verbreite nur den public Key, der private Key verbleibt nur auf der Control-Node! |
+|---------------|:------------------------|
 
 Verbinde dich nun mit der Managed-Node.
 erstelle im .ssh Ordner eine Datei namens "authorized_keys" und füge deinen Public Key ein:
